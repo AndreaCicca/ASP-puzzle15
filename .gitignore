@@ -1,2 +1,7 @@
 output_images/*
 holds.txt
+*.pl
+*.json
+*.png
+*.mp4
+*.txt

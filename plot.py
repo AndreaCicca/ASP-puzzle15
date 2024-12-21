@@ -29,8 +29,12 @@ def draw_grid(state, t):
         cell.set_edgecolor('black')
         cell.set_linewidth(2)
         cell.set_height(1/3)
+        # Modifica stile testo
+        if (i, j) != (0, -1):  # Ignora le intestazioni (non presenti in questo caso)
+            cell.set_text_props(fontsize=16, weight='bold', ha='center', va='center')
     plt.savefig(f"output_images/puzzle_time_{t}.png")
     plt.close()
+
 
 def print_grid(state, t):
     print(f"Tempo {t}:")

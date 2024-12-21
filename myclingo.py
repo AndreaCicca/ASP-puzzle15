@@ -2,7 +2,7 @@ import sys
 import time
 from clingo import Control
 
-def solve_game(maxtime=24, path_file="./3x3/gioco_8.asp", initial_config_path="./3x3/initial_state/state_2.pl", configurations=["jumpy"]):
+def solve_game(maxtime=24, path_file="./gioco.asp", initial_config_path="./3x3/initial_state/state_2.pl", configurations=["jumpy"]):
     print("Risoluzione del gioco al path: ", path_file)
     print("Configurazione iniziale al path: ", initial_config_path)
 

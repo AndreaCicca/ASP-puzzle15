@@ -299,13 +299,13 @@ def main(rows, cols, num_moves=10, do_solve=False):
 # --------------------------------------------------------------
 if __name__ == "__main__":
     # Esempio 1: puzzle 3x3 con 20 mosse
-    main(3, 3, num_moves=30, do_solve=False)
+    main(3, 3, num_moves=50, do_solve=False)
 
     # Esempio 2: puzzle 3x4 con 20 mosse
-    main(3, 4, num_moves=30, do_solve=False)
+    main(3, 4, num_moves=50, do_solve=False)
 
     # Esempio 3: puzzle 4x4 con 50 mosse
-    main(4, 4, num_moves=30, do_solve=False)
+    main(4, 4, num_moves=50, do_solve=False)
     
     # Esegui lo script "python conf_iniziali.py"
     os.system("python conf_iniziali.py")

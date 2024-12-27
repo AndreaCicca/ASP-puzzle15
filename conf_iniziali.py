@@ -18,7 +18,11 @@ def create_initial_state_files(input_dir):
     Legge i file JSON nelle sottocartelle, converte gli array in configurazioni iniziali
     e salva ogni configurazione in un file separato nella rispettiva cartella 'initial_state'.
     """
+    valid_dirs = {'3x3', '4x4', '3x4'}
     for subdir in os.listdir(input_dir):
+        if subdir not in valid_dirs:
+            continue
+
         subpath = os.path.join(input_dir, subdir)
         if not os.path.isdir(subpath):
             continue

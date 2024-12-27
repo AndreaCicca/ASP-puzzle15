@@ -2,8 +2,11 @@ import sys
 import time
 from clingo import Control
 
-def solve_game(maxtime=24, path_file="./gioco.asp", initial_config_path="./3x3/initial_state/state_2.pl", configurations=["jumpy"]):
+def solve_game(maxtime=30, conf="3x3" ,path_file="./gioco.asp", initial_config_path="./3x3/initial_state/state_2.pl", goal = "./goal/3x3.pl", configurations=["jumpy"]):
+    print("######### Risoluzione del gioco con ASP ###########")
+    print ("Configurazione: ", conf)
     print("Risoluzione del gioco al path: ", path_file)
+    print("Obiettivo al path: ", goal)
     print("Configurazione iniziale al path: ", initial_config_path)
 
     if configurations is None:
@@ -20,11 +23,23 @@ def solve_game(maxtime=24, path_file="./gioco.asp", initial_config_path="./3x3/i
 
         # Aggiungi il limite di tempo come direttiva ASP
         ctl.add("base", [], f"#const maxtime = {maxtime}.")
+        
+        
+        if conf == "3x3":
+            ctl.add("base", [], "#const n = 3.")
+        elif conf == "4x4":
+            ctl.add("base", [], "#const n = 4.")
+
 
         # Carica la configurazione iniziale, se presente
         if initial_config_path:
             ctl.load(initial_config_path)
-
+            ctl.load(goal)
+            # faccio uno switch case per caricare le configurazioni
+            # se conf == 3x3 carico #const n = 3
+            # se conf == 4x4 carico #const n = 4
+            
+        
         # Carica il programma principale
         ctl.load(path_file)
 
@@ -60,8 +75,16 @@ def solve_game(maxtime=24, path_file="./gioco.asp", initial_config_path="./3x3/i
 
 
 def main():
-    path_file = "./3x3/gioco_8.asp"  # Percorso predefinito
-    initial_config_path = "./3x3/initial_state/state_2.pl"
+    # path_file = "./gioco.asp"  # Percorso predefinito
+    # path_goal = "./goal/3x3.pl"
+    # initial_config_path = "./3x3/initial_state/state_2.pl"
+    # configurazione_gioco = "3x3"
+    
+    
+    path_file = "./gioco.asp"  # Percorso predefinito
+    path_goal = "./goal/4x4.pl"
+    initial_config_path = "./4x4/initial_state/state_1.pl"
+    configurazione_gioco = "4x4"
 
     # Controlla i flag e aggiorna i parametri
     if "-p" in sys.argv:
@@ -80,39 +103,38 @@ def main():
             print("Errore: nessun percorso specificato dopo il flag -ci")
             sys.exit(1)
 
-    if len(sys.argv) > 1 and sys.argv[1] == "-gara":
-        # Risolvi il puzzle dell'8 con gara
-        all_solutions, times = solve_game(path_file=path_file, initial_config_path=initial_config_path)
+    # if len(sys.argv) > 1 and sys.argv[1] == "-gara":
+    #     # Risolvi il puzzle dell'8 con gara
+    #     all_solutions, times = solve_game(path_file=path_file, initial_config_path=initial_config_path, goal=path_goal, conf=configurazione_gioco)
 
-        # Ordina le configurazioni per tempo
-        sorted_configs = sorted(times, key=times.get)
+    #     # Ordina le configurazioni per tempo
+    #     sorted_configs = sorted(times, key=times.get)
 
-        # Stampa i risultati della gara
-        print("Classifica della gara:")
-        for i, config in enumerate(sorted_configs, 1):
-            print(f"{i}. Configurazione: {config}, Tempo: {times[config]:.2f} secondi")
-            solutions = all_solutions[config]
-            for j, solution in enumerate(solutions, 1):
-                print(f"  Soluzione {j}:")
-                for action in solution:
-                    print(f"    {action}")
-                print("\n")
-    else:
-        # Risolvi il puzzle dell'8 senza gara
-        all_solutions, times = solve_game(path_file=path_file, initial_config_path=initial_config_path)
-
-        # Stampa le soluzioni trovate
-        solutions = all_solutions["jumpy"]
-        for i, solution in enumerate(solutions, 1):
-            print(f"\n")
-            print(f"Soluzione {i}:")
-            # Ordina le azioni in base al momento temporale
-            sorted_actions = sorted(solution, key=lambda x: int(str(x).split(",")[-1].strip(")")))
-            for action in sorted_actions:
-                print(action)
-        
+    #     # Stampa i risultati della gara
+    #     print("Classifica della gara:")
+    #     for i, config in enumerate(sorted_configs, 1):
+    #         print(f"{i}. Configurazione: {config}, Tempo: {times[config]:.2f} secondi")
+    #         solutions = all_solutions[config]
+    #         for j, solution in enumerate(solutions, 1):
+    #             print(f"  Soluzione {j}:")
+    #             for action in solution:
+    #                 print(f"    {action}")
+    #             print("\n")
+    # else:
+    
+    # Risolvi il puzzle dell'8 senza gara
+    all_solutions, times = solve_game(path_file=path_file, initial_config_path=initial_config_path, goal=path_goal, conf=configurazione_gioco)
+    solutions = all_solutions["jumpy"]
+    for i, solution in enumerate(solutions, 1):
         print(f"\n")
-        print(f"Tempo impiegato: {times['jumpy']:.2f} secondi")
+        print(f"Soluzione {i}:")
+        # Ordina le azioni in base al momento temporale
+        sorted_actions = sorted(solution, key=lambda x: int(str(x).split(",")[-1].strip(")")))
+        for action in sorted_actions:
+            print(action)
+    
+    print(f"\n")
+    print(f"Tempo impiegato: {times['jumpy']:.2f} secondi")
 
 if __name__ == "__main__":
     main()

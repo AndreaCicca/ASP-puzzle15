@@ -4,7 +4,8 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 % 0) Parametri e costanti
-#const n = 3.        % Dimensione della griglia (default 3x3)
+% #const n = 3.        % Dimensione della griglia (default 3x3)
+% #const n = 4.
 % #const maxtime = 25. % Tempo massimo di ricerca
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -40,15 +41,15 @@ fluent(posizione_tessera(Tessera, X, Y)) :-
 % 4) Configurazione obiettivo (default 3×3)
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Esempio di configurazione goal
-goal(posizione_tessera(1, 1, 1)).
-goal(posizione_tessera(2, 1, 2)).
-goal(posizione_tessera(3, 1, 3)).
-goal(posizione_tessera(4, 2, 1)).
-goal(posizione_tessera(5, 2, 2)).
-goal(posizione_tessera(6, 2, 3)).
-goal(posizione_tessera(7, 3, 1)).
-goal(posizione_tessera(8, 3, 2)).
-goal(posizione_tessera(0, 3, 3)).
+% goal(posizione_tessera(1, 1, 1)).
+% goal(posizione_tessera(2, 1, 2)).
+% goal(posizione_tessera(3, 1, 3)).
+% goal(posizione_tessera(4, 2, 1)).
+% goal(posizione_tessera(5, 2, 2)).
+% goal(posizione_tessera(6, 2, 3)).
+% goal(posizione_tessera(7, 3, 1)).
+% goal(posizione_tessera(8, 3, 2)).
+% goal(posizione_tessera(0, 3, 3)).
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % 5) Azione di movimento e vicinanza

@@ -1,57 +1,63 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% puzzle_nxn.asp
-% Puzzle dell'8 o 15
+% puzzle_nr_nc.asp
+% Puzzle generico (nr x nc)
+%
+% NOTE:
+%  - Non sono presenti definizioni di `initially(...)`.
+%  - Non sono presenti definizioni di `goal(...)`.
+%  - Dovrai inserire manualmente le configurazioni di partenza e le 
+%    configurazioni obiettivo.
+%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % 0) Parametri e costanti
-#const n = 3.        % Dimensione della griglia (default 3x3)
-% #const maxtime = 25. % Tempo massimo di ricerca
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+#const nr = 3.         % Numero di righe (esempio)
+#const nc = 4.         % Numero di colonne (esempio)
+#const maxtime = 25.   % Tempo massimo di ricerca
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % 1) Definizione del dominio
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-dom(1..n).                       % Righe e colonne
-posizione(X, Y) :- dom(X), dom(Y).
-
-tessera(0..(n*n - 1)).           % 0 rappresenta lo spazio vuoto
+domR(1..nr).              % Righe
+domC(1..nc).              % Colonne
+posizione(X, Y) :- domR(X), domC(Y).
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% 2) Fluenti
+% 2) Tessere
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+tessera(0..(nr*nc - 1)).  % 0 rappresenta lo spazio vuoto
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% 3) Fluenti
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 fluent(posizione_tessera(Tessera, X, Y)) :-
     tessera(Tessera),
     posizione(X, Y).
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% 3) Stato iniziale (default 3×3)
+% 4) Stato iniziale (vuoto, da completare)
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% Esempio di configurazione iniziale
+% Esempio di uso (commentato):
+%
 % initially(posizione_tessera(1, 1, 1)).
-% initially(posizione_tessera(7, 1, 2)).
-% initially(posizione_tessera(8, 1, 3)).
-% initially(posizione_tessera(4, 2, 1)).
-% initially(posizione_tessera(5, 2, 2)).
-% initially(posizione_tessera(6, 2, 3)).
-% initially(posizione_tessera(2, 3, 1)).
-% initially(posizione_tessera(0, 3, 2)).  % Spazio vuoto
-% initially(posizione_tessera(3, 3, 3)).
+% initially(posizione_tessera(2, 1, 2)).
+% ...
+% initially(posizione_tessera(0, nr, nc)).
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% 4) Configurazione obiettivo (default 3×3)
+% 5) Configurazione obiettivo (vuota, da completare)
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% Esempio di configurazione goal
-goal(posizione_tessera(1, 1, 1)).
-goal(posizione_tessera(2, 1, 2)).
-goal(posizione_tessera(3, 1, 3)).
-goal(posizione_tessera(4, 2, 1)).
-goal(posizione_tessera(5, 2, 2)).
-goal(posizione_tessera(6, 2, 3)).
-goal(posizione_tessera(7, 3, 1)).
-goal(posizione_tessera(8, 3, 2)).
-goal(posizione_tessera(0, 3, 3)).
+% Esempio di uso (commentato):
+%
+% goal(posizione_tessera(1, 1, 1)).
+% goal(posizione_tessera(2, 1, 2)).
+% ...
+% goal(posizione_tessera(0, nr, nc)).
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% 5) Azione di movimento e vicinanza
+% 6) Azione di movimento e vicinanza
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 adiacente(X1, Y1, X2, Y2) :-
     posizione(X1, Y1),
@@ -64,7 +70,7 @@ azione(muovi(Tessera, X1, Y1, X2, Y2)) :-
     adiacente(X1, Y1, X2, Y2).
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% 6) Possibilità dell’azione
+% 7) Possibilità dell’azione
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 possibile(muovi(Tessera, X1, Y1, X2, Y2), T) :-
     holds(posizione_tessera(Tessera, X1, Y1), T),
@@ -73,14 +79,14 @@ possibile(muovi(Tessera, X1, Y1, X2, Y2), T) :-
     time(T).
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% 7) Scelta dell’azione
+% 8) Scelta dell’azione
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 { occurs(muovi(Tessera, X1, Y1, X2, Y2), T) } :-
     possibile(muovi(Tessera, X1, Y1, X2, Y2), T),
     time(T).
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% 8) Effetti delle azioni
+% 9) Effetti delle azioni
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 holds(posizione_tessera(Tessera, X2, Y2), T+1) :-
     occurs(muovi(Tessera, X1, Y1, X2, Y2), T),
@@ -91,7 +97,7 @@ holds(posizione_tessera(0, X1, Y1), T+1) :-
     time(T).
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% 9) Persistenza dei fluenti
+% 10) Persistenza dei fluenti
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 holds(posizione_tessera(Tessera, X, Y), T+1) :-
     holds(posizione_tessera(Tessera, X, Y), T),
@@ -101,7 +107,7 @@ holds(posizione_tessera(Tessera, X, Y), T+1) :-
     time(T).
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% 10) Vincoli vari
+% 11) Vincoli vari
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 % a) Nessuna soluzione se abbiamo stati dopo il tempo TG in cui il goal è raggiunto
@@ -130,7 +136,7 @@ holds(posizione_tessera(Tessera, X, Y), T+1) :-
    occurs(muovi(_, X2, Y2, X1, Y1), T+1).
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% 11) Euristica: penalizziamo i movimenti
+% 12) Euristica: penalizziamo i movimenti
 %     che allontanano la tessera dal goal
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 distanza_manhattan(Tessera, D, T) :-
@@ -145,14 +151,14 @@ distanza_manhattan(Tessera, D, T) :-
     D2 > D1. [D2 - D1@1]
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% 12) Tempo e stato iniziale
+% 13) Tempo e stato iniziale
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 time(0..maxtime).
 
 holds(F, 0) :- initially(F).
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% 13) Raggiungimento dell’obiettivo
+% 14) Raggiungimento dell’obiettivo
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 goal_reached(T) :-
     time(T),
@@ -160,7 +166,7 @@ goal_reached(T) :-
        Tessera, X, Y :
           goal(posizione_tessera(Tessera, X, Y)),
           holds(posizione_tessera(Tessera, X, Y), T)
-    } = n*n.
+    } = nr*nc.
 
 % Minimizzare il tempo di raggiungimento del goal
 #minimize { T : goal_reached(T) }.
@@ -169,11 +175,9 @@ goal_reached(T) :-
 :- not goal_reached(_).
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% 14) Output (scegli cosa mostrare)
+% 15) Output (scegli cosa mostrare)
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % #show occurs/2.
 % #show possibile/2.
-
-% Mostriamo i fluenti hold in ogni stato e quando il goal è raggiunto
 #show holds/2.
 #show goal_reached/1.

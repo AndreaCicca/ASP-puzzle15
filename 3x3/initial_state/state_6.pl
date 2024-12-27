@@ -1,9 +1,0 @@
-initially(posizione_tessera(4, 1, 1)).
-initially(posizione_tessera(0, 1, 2)).
-initially(posizione_tessera(5, 1, 3)).
-initially(posizione_tessera(3, 2, 1)).
-initially(posizione_tessera(1, 2, 2)).
-initially(posizione_tessera(2, 2, 3)).
-initially(posizione_tessera(7, 3, 1)).
-initially(posizione_tessera(8, 3, 2)).
-initially(posizione_tessera(6, 3, 3)).

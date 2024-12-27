@@ -1,21 +1,9 @@
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% puzzle_nr_nc.asp
-% Puzzle generico (nr x nc)
-%
-% NOTE:
-%  - Non sono presenti definizioni di `initially(...)`.
-%  - Non sono presenti definizioni di `goal(...)`.
-%  - Dovrai inserire manualmente le configurazioni di partenza e le 
-%    configurazioni obiettivo.
-%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % 0) Parametri e costanti
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-#const nr = 3.         % Numero di righe (esempio)
-#const nc = 4.         % Numero di colonne (esempio)
-#const maxtime = 25.   % Tempo massimo di ricerca
+% #const nr = 3.         % Numero di righe (esempio)
+% #const nc = 4.         % Numero di colonne (esempio)
+% #const maxtime = 25.   % Tempo massimo di ricerca
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % 1) Definizione del dominio

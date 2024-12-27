@@ -1,9 +1,9 @@
-initially(posizione_tessera(5, 1, 1)).
-initially(posizione_tessera(4, 1, 2)).
+initially(posizione_tessera(8, 1, 1)).
+initially(posizione_tessera(7, 1, 2)).
 initially(posizione_tessera(2, 1, 3)).
-initially(posizione_tessera(8, 2, 1)).
-initially(posizione_tessera(7, 2, 2)).
-initially(posizione_tessera(3, 2, 3)).
-initially(posizione_tessera(0, 3, 1)).
-initially(posizione_tessera(1, 3, 2)).
-initially(posizione_tessera(6, 3, 3)).
+initially(posizione_tessera(5, 2, 1)).
+initially(posizione_tessera(3, 2, 2)).
+initially(posizione_tessera(6, 2, 3)).
+initially(posizione_tessera(1, 3, 1)).
+initially(posizione_tessera(4, 3, 2)).
+initially(posizione_tessera(0, 3, 3)).

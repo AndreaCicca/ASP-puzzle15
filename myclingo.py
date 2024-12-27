@@ -2,7 +2,7 @@ import sys
 import time
 from clingo import Control
 
-def solve_game(maxtime=30, conf="3x3" ,path_file="./gioco.asp", initial_config_path="./3x3/initial_state/state_2.pl", goal = "./goal/3x3.pl", configurations=["jumpy"]):
+def solve_game(maxtime=50, conf="3x3" ,path_file="./gioco.asp", initial_config_path="./3x3/initial_state/state_2.pl", goal = "./goal/3x3.pl", configurations=["jumpy"]):
     print("######### Risoluzione del gioco con ASP ###########")
     print ("Configurazione: ", conf)
     print("Risoluzione del gioco al path: ", path_file)
@@ -26,9 +26,14 @@ def solve_game(maxtime=30, conf="3x3" ,path_file="./gioco.asp", initial_config_p
         
         
         if conf == "3x3":
-            ctl.add("base", [], "#const n = 3.")
+            ctl.add("base", [], "#const nr = 3.")
+            ctl.add("base", [], "#const nc = 3.")
         elif conf == "4x4":
-            ctl.add("base", [], "#const n = 4.")
+            ctl.add("base", [], "#const nr = 4.")
+            ctl.add("base", [], "#const nc = 4.")
+        elif conf == "3x4":
+            ctl.add("base", [], "#const nr = 3.")
+            ctl.add("base", [], "#const nc = 4.")
 
 
         # Carica la configurazione iniziale, se presente
@@ -75,16 +80,16 @@ def solve_game(maxtime=30, conf="3x3" ,path_file="./gioco.asp", initial_config_p
 
 
 def main():
-    # path_file = "./gioco.asp"  # Percorso predefinito
+    # path_file = "./gioco.asp"  
     # path_goal = "./goal/3x3.pl"
     # initial_config_path = "./3x3/initial_state/state_2.pl"
     # configurazione_gioco = "3x3"
     
-    
-    path_file = "./gioco.asp"  # Percorso predefinito
-    path_goal = "./goal/4x4.pl"
-    initial_config_path = "./4x4/initial_state/state_1.pl"
     configurazione_gioco = "4x4"
+    path_file = f"./gioco_generico.asp" 
+    path_goal = f"./goal/{configurazione_gioco}.pl"
+    initial_config_path = f"./{configurazione_gioco}/initial_state/state_1.pl"
+    
 
     # Controlla i flag e aggiorna i parametri
     if "-p" in sys.argv:

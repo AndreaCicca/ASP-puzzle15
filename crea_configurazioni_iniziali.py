@@ -312,11 +312,13 @@ if __name__ == "__main__":
     
     # Crea 33 configurazioni iniziali per ogni dimensione, con un numero di passi randomici tra 10 e 50
     # Strategia random
-    
+    random.seed(42)
     combinazioni = [(3,3), (3,4), (4,4)]
     
     for rows, cols in combinazioni:
         for _ in range(33):
-            main(rows, cols, num_moves=random.randint(10, 50), do_solve=False)
+            random_number = random.randint(10, 50)
+            main(rows, cols, num_moves=random_number, do_solve=False)
+            print(f"Configurazione {rows}x{cols} creata con {random_number} mosse.")
     
     

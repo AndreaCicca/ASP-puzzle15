@@ -1,15 +1,29 @@
 import sys
+import threading
 import time
 import csv
 import os
 from clingo import Control
 
-def solve_game(maxtime=50, conf="3x3" ,path_file="./gioco.asp", initial_config_path="./3x3/initial_state/state_2.pl", goal = "./goal/3x3.pl", configurations=["jumpy"]):
+def solve_with_timeout(ctl, results, last_holds, solved_event):
+    """Funzione per risolvere il problema con il timeout."""
+    with ctl.solve(yield_=True) as handle:
+        for model in handle:
+            actions = [atom for atom in model.symbols(atoms=True) if str(atom).startswith("occurs")]
+            results.append(actions)
+
+            holds = [str(atom) for atom in model.symbols(atoms=True) if str(atom).startswith("hold")]
+            last_holds[:] = holds  # Aggiorna la lista con l'ultimo modello trovato
+
+    solved_event.set()
+
+def solve_game(maxtime=50, conf="3x3", path_file="./gioco.asp", initial_config_path="./3x3/initial_state/state_2.pl", goal="./goal/3x3.pl", configurations=["jumpy"], time_limit=300):
     print("######### Risoluzione del gioco con ASP ###########")
-    print ("Configurazione: ", conf)
-    print("Risoluzione del gioco al path: ", path_file)
-    print("Obiettivo al path: ", goal)
-    print("Configurazione iniziale al path: ", initial_config_path)
+    print("Configurazione:", conf)
+    print("Risoluzione del gioco al path:", path_file)
+    print("Obiettivo al path:", goal)
+    print("Configurazione iniziale al path:", initial_config_path)
+    print(f"Limite di tempo: {time_limit} secondi")
 
     if configurations is None:
         configurations = ["jumpy", "tweety", "trendy", "crafty", "handy"]
@@ -20,12 +34,10 @@ def solve_game(maxtime=50, conf="3x3" ,path_file="./gioco.asp", initial_config_p
     for config in configurations:
         print(f"Risoluzione con configurazione: {config}")
 
-        # Crea un controllo Clingo con l'opzione multi-threading
         ctl = Control(["-t", "8"])
 
         # Aggiungi il limite di tempo come direttiva ASP
         ctl.add("base", [], f"#const maxtime = {maxtime}.")
-        
         
         if conf == "3x3":
             ctl.add("base", [], "#const nr = 3.")
@@ -37,16 +49,11 @@ def solve_game(maxtime=50, conf="3x3" ,path_file="./gioco.asp", initial_config_p
             ctl.add("base", [], "#const nr = 3.")
             ctl.add("base", [], "#const nc = 4.")
 
-
         # Carica la configurazione iniziale, se presente
         if initial_config_path:
             ctl.load(initial_config_path)
             ctl.load(goal)
-            # faccio uno switch case per caricare le configurazioni
-            # se conf == 3x3 carico #const n = 3
-            # se conf == 4x4 carico #const n = 4
-            
-        
+
         # Carica il programma principale
         ctl.load(path_file)
 
@@ -55,25 +62,24 @@ def solve_game(maxtime=50, conf="3x3" ,path_file="./gioco.asp", initial_config_p
 
         # Risolvi e raccogli i risultati
         results = []
-        last_holds = []  # Lista per gli holds dell'ultimo modello
+        last_holds = []
 
         start_time = time.time()
-        with ctl.solve(yield_=True) as handle:
-            for model in handle:
-                # Estrai le azioni dal modello
-                actions = [atom for atom in model.symbols(atoms=True) if str(atom).startswith("occurs")]
-                results.append(actions)
+        solved = threading.Event()  # Evento per gestire il timeout
+        solution_thread = threading.Thread(target=lambda: solve_with_timeout(ctl, results, last_holds, solved))
+        solution_thread.start()
+        solution_thread.join(timeout=time_limit)
 
-                # Estrai le soluzioni hold
-                holds = [str(atom) for atom in model.symbols(atoms=True) if str(atom).startswith("hold")]
-                last_holds = holds  # Aggiorna gli holds all'ultimo modello
+        if solution_thread.is_alive():
+            print("Timeout raggiunto. Interruzione della risoluzione.")
+            solution_thread.join()  # Assicurati che il thread si chiuda correttamente
 
         end_time = time.time()
 
-        # Dopo aver iterato tutti i modelli, scrivi gli holds dell'ultimo nel file
-        with open("holds.txt", "w") as file:
-            for hold in last_holds:
-                file.write(f"{hold}\n")
+        # # Dopo aver iterato tutti i modelli, scrivi gli holds dell'ultimo nel file
+        # with open("holds.txt", "w") as file:
+        #     for hold in last_holds:
+        #         file.write(f"{hold}\n")
 
         all_results[config] = results
         times[config] = end_time - start_time
@@ -92,7 +98,6 @@ def multiple_configuration():
     path_file = f"./gioco_generico.asp" 
     path_goal = f"./goal/{configurazione_gioco}.pl"
     initial_config_path = f"./{configurazione_gioco}/initial_state/state_10.pl"
-    
 
     # Controlla i flag e aggiorna i parametri
     if "-p" in sys.argv:
@@ -131,7 +136,7 @@ def multiple_configuration():
     # else:
     
     # Risolvi il puzzle dell'8 senza gara
-    all_solutions, times = solve_game(path_file=path_file, initial_config_path=initial_config_path, goal=path_goal, conf=configurazione_gioco)
+    all_solutions, times = solve_game(path_file=path_file, initial_config_path=initial_config_path, goal=path_goal, conf=configurazione_gioco, time_limit=300)
     solutions = all_solutions["jumpy"]
     for i, solution in enumerate(solutions, 1):
         print(f"\n")
@@ -164,7 +169,7 @@ def benchmark():
     for c in combinazioni:
         goal_path = f"./goal/{c}.pl"
         lista_iniziali = os.listdir(f"./{c}/initial_state")
-        sorted(lista_iniziali)
+        lista_iniziali.sort()
         print(f"Configurazioni per {c}: ")
         print(lista_iniziali)
         

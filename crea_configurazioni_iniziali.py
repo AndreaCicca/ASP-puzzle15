@@ -298,14 +298,25 @@ def main(rows, cols, num_moves=10, do_solve=False):
 # Esempi d'uso se eseguito come script
 # --------------------------------------------------------------
 if __name__ == "__main__":
-    # Esempio 1: puzzle 3x3 con 20 mosse
-    main(3, 3, num_moves=50, do_solve=False)
+    # # Esempio 1: puzzle 3x3 con 20 mosse
+    # main(3, 3, num_moves=30, do_solve=False)
 
-    # Esempio 2: puzzle 3x4 con 20 mosse
-    main(3, 4, num_moves=50, do_solve=False)
+    # # Esempio 2: puzzle 3x4 con 20 mosse
+    # main(3, 4, num_moves=30, do_solve=False)
 
-    # Esempio 3: puzzle 4x4 con 50 mosse
-    main(4, 4, num_moves=50, do_solve=False)
+    # # Esempio 3: puzzle 4x4 con 50 mosse
+    # main(4, 4, num_moves=25, do_solve=False)
     
     # Esegui lo script "python conf_iniziali.py"
     os.system("python conf_iniziali.py")
+    
+    # Crea 33 configurazioni iniziali per ogni dimensione, con un numero di passi randomici tra 10 e 50
+    # Strategia random
+    
+    combinazioni = [(3,3), (3,4), (4,4)]
+    
+    for rows, cols in combinazioni:
+        for _ in range(33):
+            main(rows, cols, num_moves=random.randint(10, 50), do_solve=False)
+    
+    

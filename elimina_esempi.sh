@@ -3,3 +3,4 @@
 rm -rf 3x3
 rm -rf 4x4
 rm -rf 3x4
+rm -rf output_images

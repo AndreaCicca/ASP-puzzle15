@@ -1,5 +1,7 @@
 import sys
 import time
+import csv
+import os
 from clingo import Control
 
 def solve_game(maxtime=50, conf="3x3" ,path_file="./gioco.asp", initial_config_path="./3x3/initial_state/state_2.pl", goal = "./goal/3x3.pl", configurations=["jumpy"]):
@@ -78,17 +80,18 @@ def solve_game(maxtime=50, conf="3x3" ,path_file="./gioco.asp", initial_config_p
 
     return all_results, times
 
-
-def main():
+def multiple_configuration():
     # path_file = "./gioco.asp"  
     # path_goal = "./goal/3x3.pl"
     # initial_config_path = "./3x3/initial_state/state_2.pl"
     # configurazione_gioco = "3x3"
     
-    configurazione_gioco = "4x4"
+    configurazione_gioco = "3x3"
+    # configurazione_gioco = "3x4"
+    # configurazione_gioco = "4x4"
     path_file = f"./gioco_generico.asp" 
     path_goal = f"./goal/{configurazione_gioco}.pl"
-    initial_config_path = f"./{configurazione_gioco}/initial_state/state_1.pl"
+    initial_config_path = f"./{configurazione_gioco}/initial_state/state_10.pl"
     
 
     # Controlla i flag e aggiorna i parametri
@@ -141,5 +144,44 @@ def main():
     print(f"\n")
     print(f"Tempo impiegato: {times['jumpy']:.2f} secondi")
 
+
+def benchmark():
+    
+    # devo risolvere tutte le configurazioni con tutte le configurazioni iniziali per 3x3, 3x4, 4x4
+    conf = ["jumpy"]
+    
+    # combinazioni = ["3x3", "3x4", "4x4"]
+    combinazioni = ["3x3"]
+    # devo salvare i risultati dentro ad un file csv che tiene traccia del tempo impiegato per ogni configurazione
+    # devo prendere i dati relativi agli stati iniziali e al goal
+    
+    # reset csv
+    for c in combinazioni:
+        with open(f'results_{c}.csv', mode='w') as file:
+            writer = csv.writer(file)
+            writer.writerow(["configurazione", "iniziale", "tempo", "mosse"])
+    
+    for c in combinazioni:
+        goal_path = f"./goal/{c}.pl"
+        lista_iniziali = os.listdir(f"./{c}/initial_state")
+        sorted(lista_iniziali)
+        print(f"Configurazioni per {c}: ")
+        print(lista_iniziali)
+        
+        
+        for iniziale in lista_iniziali:
+            initial_path = f"./{c}/initial_state/{iniziale}"
+            all_solutions, times = solve_game(path_file=f"./gioco_generico.asp", initial_config_path=initial_path, goal=goal_path, conf=c)
+            solutions = all_solutions["jumpy"]
+            if solutions:
+                shortest_solution = min(solutions, key=lambda x: len(x))
+                mosse_minime = len(shortest_solution)
+            else:
+                mosse_minime = 0
+            with open(f'results_{c}.csv', mode='a') as file:
+                writer = csv.writer(file)
+                writer.writerow([c, iniziale, times["jumpy"], mosse_minime])
+        
+
 if __name__ == "__main__":
-    main()
+    benchmark()

@@ -47,10 +47,15 @@ fluent(posizione_tessera(Tessera, X, Y)) :-
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % 6) Azione di movimento e vicinanza
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-adiacente(X1, Y1, X2, Y2) :-
-    posizione(X1, Y1),
-    posizione(X2, Y2),
-    |X1 - X2| + |Y1 - Y2| == 1.
+% adiacente(X1, Y1, X2, Y2) :-
+%     posizione(X1, Y1),
+%     posizione(X2, Y2),
+%     |X1 - X2| + |Y1 - Y2| == 1.
+
+adiacente(X, Y, X+1, Y) :- posizione(X, Y), posizione(X+1, Y).
+adiacente(X, Y, X-1, Y) :- posizione(X, Y), posizione(X-1, Y).
+adiacente(X, Y, X, Y+1) :- posizione(X, Y), posizione(X, Y+1).
+adiacente(X, Y, X, Y-1) :- posizione(X, Y), posizione(X, Y-1).
 
 azione(muovi(Tessera, X1, Y1, X2, Y2)) :-
     tessera(Tessera),

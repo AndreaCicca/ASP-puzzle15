@@ -317,7 +317,7 @@ if __name__ == "__main__":
     
     for rows, cols in combinazioni:
         for _ in range(33):
-            random_number = random.randint(10, 50)
+            random_number = random.randint(10, 30)
             main(rows, cols, num_moves=random_number, do_solve=False)
             print(f"Configurazione {rows}x{cols} creata con {random_number} mosse.")
     

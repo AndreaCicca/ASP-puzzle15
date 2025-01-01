@@ -169,7 +169,8 @@ def benchmark():
     for c in combinazioni:
         goal_path = f"./goal/{c}.pl"
         lista_iniziali = os.listdir(f"./{c}/initial_state")
-        lista_iniziali.sort()
+        lista_iniziali = sorted(lista_iniziali, key=lambda x: int(x.split("_")[1].split(".")[0]))
+
         print(f"Configurazioni per {c}: ")
         print(lista_iniziali)
         

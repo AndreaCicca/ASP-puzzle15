@@ -155,8 +155,8 @@ def benchmark():
     # devo risolvere tutte le configurazioni con tutte le configurazioni iniziali per 3x3, 3x4, 4x4
     conf = ["jumpy"]
     
-    # combinazioni = ["3x3", "3x4", "4x4"]
-    combinazioni = ["3x3"]
+    combinazioni = ["3x3", "3x4", "4x4"]
+    # combinazioni = ["4x4"]
     # devo salvare i risultati dentro ad un file csv che tiene traccia del tempo impiegato per ogni configurazione
     # devo prendere i dati relativi agli stati iniziali e al goal
     

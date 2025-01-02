@@ -17,7 +17,7 @@ def solve_with_timeout(ctl, results, last_holds, solved_event):
 
     solved_event.set()
 
-def solve_game(maxtime=50, conf="3x3", path_file="./gioco.asp", initial_config_path="./3x3/initial_state/state_2.pl", goal="./goal/3x3.pl", configurations=["jumpy"], time_limit=300):
+def solve_game(maxtime=50, conf="3x3", path_file="./gioco.asp", initial_config_path="./3x3/initial_state/state_2.pl", goal="./goal/3x3.pl", configurations=["crafty"], time_limit=300):
     print("######### Risoluzione del gioco con ASP ###########")
     print("Configurazione:", conf)
     print("Risoluzione del gioco al path:", path_file)
@@ -34,7 +34,7 @@ def solve_game(maxtime=50, conf="3x3", path_file="./gioco.asp", initial_config_p
     for config in configurations:
         print(f"Risoluzione con configurazione: {config}")
 
-        ctl = Control(["-t", "8"])
+        ctl = Control(["-t", "8", "--configuration", config])
 
         # Aggiungi il limite di tempo come direttiva ASP
         ctl.add("base", [], f"#const maxtime = {maxtime}.")
@@ -56,6 +56,8 @@ def solve_game(maxtime=50, conf="3x3", path_file="./gioco.asp", initial_config_p
 
         # Carica il programma principale
         ctl.load(path_file)
+        
+        # aggiungo la configurazione
 
         # Ground del programma
         ctl.ground([("base", [])])
@@ -137,7 +139,7 @@ def multiple_configuration():
     
     # Risolvi il puzzle dell'8 senza gara
     all_solutions, times = solve_game(path_file=path_file, initial_config_path=initial_config_path, goal=path_goal, conf=configurazione_gioco, time_limit=300)
-    solutions = all_solutions["jumpy"]
+    solutions = all_solutions["crafty"]
     for i, solution in enumerate(solutions, 1):
         print(f"\n")
         print(f"Soluzione {i}:")
@@ -147,13 +149,13 @@ def multiple_configuration():
             print(action)
     
     print(f"\n")
-    print(f"Tempo impiegato: {times['jumpy']:.2f} secondi")
+    print(f"Tempo impiegato: {times['crafty']:.2f} secondi")
 
 
 def benchmark():
     
     # devo risolvere tutte le configurazioni con tutte le configurazioni iniziali per 3x3, 3x4, 4x4
-    conf = ["jumpy"]
+    conf = ["crafty"]
     
     combinazioni = ["3x3", "3x4", "4x4"]
     # combinazioni = ["4x4"]
@@ -178,7 +180,7 @@ def benchmark():
         for iniziale in lista_iniziali:
             initial_path = f"./{c}/initial_state/{iniziale}"
             all_solutions, times = solve_game(path_file=f"./gioco_generico.asp", initial_config_path=initial_path, goal=goal_path, conf=c)
-            solutions = all_solutions["jumpy"]
+            solutions = all_solutions["crafty"]
             if solutions:
                 shortest_solution = min(solutions, key=lambda x: len(x))
                 mosse_minime = len(shortest_solution)
@@ -186,7 +188,7 @@ def benchmark():
                 mosse_minime = 0
             with open(f'results_{c}.csv', mode='a') as file:
                 writer = csv.writer(file)
-                writer.writerow([c, iniziale, times["jumpy"], mosse_minime])
+                writer.writerow([c, iniziale, times["crafty"], mosse_minime])
         
 
 if __name__ == "__main__":

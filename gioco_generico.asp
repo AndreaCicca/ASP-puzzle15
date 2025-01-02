@@ -10,7 +10,6 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 domR(1..nr).              % Righe
 domC(1..nc).              % Colonne
-posizione(X, Y) :- domR(X), domC(Y).
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % 2) Tessere
@@ -22,7 +21,7 @@ tessera(0..(nr*nc - 1)).  % 0 rappresenta lo spazio vuoto
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 fluent(posizione_tessera(Tessera, X, Y)) :-
     tessera(Tessera),
-    posizione(X, Y).
+    domR(X), domC(Y).
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % 4) Stato iniziale (vuoto, da completare)
@@ -52,10 +51,10 @@ fluent(posizione_tessera(Tessera, X, Y)) :-
 %     posizione(X2, Y2),
 %     |X1 - X2| + |Y1 - Y2| == 1.
 
-adiacente(X, Y, X+1, Y) :- posizione(X, Y), posizione(X+1, Y).
-adiacente(X, Y, X-1, Y) :- posizione(X, Y), posizione(X-1, Y).
-adiacente(X, Y, X, Y+1) :- posizione(X, Y), posizione(X, Y+1).
-adiacente(X, Y, X, Y-1) :- posizione(X, Y), posizione(X, Y-1).
+adiacente(X, Y, X+1, Y) :- domR(X), domC(Y), domR(X+1), domC(Y).
+adiacente(X, Y, X-1, Y) :- domR(X), domC(Y), domR(X-1), domC(Y).
+adiacente(X, Y, X, Y+1) :- domR(X), domC(Y), domR(X), domC(Y+1).
+adiacente(X, Y, X, Y-1) :- domR(X), domC(Y), domR(X), domC(Y-1).
 
 azione(muovi(Tessera, X1, Y1, X2, Y2)) :-
     tessera(Tessera),
@@ -117,6 +116,8 @@ holds(posizione_tessera(Tessera, X, Y), T+1) :-
    T1 != T2,
    time(T).
 
+:- #count { Tessera : occurs(muovi(Tessera, _, _, _, _), T) } > 1, time(T).
+
 % d) Nessuna azione deve avvenire dopo il raggiungimento del goal
 :- occurs(_, T),
    T > TG,
@@ -132,16 +133,16 @@ holds(posizione_tessera(Tessera, X, Y), T+1) :-
 % 12) Euristica: penalizziamo i movimenti
 %     che allontanano la tessera dal goal
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-distanza_manhattan(Tessera, D, T) :-
-    tessera(Tessera), Tessera != 0,
-    holds(posizione_tessera(Tessera, X1, Y1), T),
-    goal(posizione_tessera(Tessera, Xg, Yg)),
-    D = |X1 - Xg| + |Y1 - Yg|.
+% distanza_manhattan(Tessera, D, T) :-
+%     tessera(Tessera), Tessera != 0,
+%     holds(posizione_tessera(Tessera, X1, Y1), T),
+%     goal(posizione_tessera(Tessera, Xg, Yg)),
+%     D = |X1 - Xg| + |Y1 - Yg|.
 
-:~ occurs(muovi(Tessera, X1, Y1, X2, Y2), T),
-    distanza_manhattan(Tessera, D1, T),
-    distanza_manhattan(Tessera, D2, T+1),
-    D2 > D1. [D2 - D1@1]
+% :~ occurs(muovi(Tessera, X1, Y1, X2, Y2), T),
+%     distanza_manhattan(Tessera, D1, T),
+%     distanza_manhattan(Tessera, D2, T+1),
+%     D2 > D1. [D2 - D1@1]
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % 13) Tempo e stato iniziale

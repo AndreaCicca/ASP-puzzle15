@@ -121,7 +121,7 @@ def generate_solution_tiles(rows, cols):
 # --------------------------------------------------------------
 # Modalità 1: generazione casuale
 # --------------------------------------------------------------
-def generate_configuration_random(rows, cols, num_moves=10):
+def generate_configuration_random(rows, cols, num_moves):
     """
     Partendo dalla configurazione finale (soluzione), esegue 'num_moves' mosse casuali
     per ottenere una configurazione iniziale sicuramente risolvibile.
@@ -308,17 +308,17 @@ if __name__ == "__main__":
     # main(4, 4, num_moves=25, do_solve=False)
     
     # Esegui lo script "python conf_iniziali.py"
-    os.system("python conf_iniziali.py")
     
     # Crea 33 configurazioni iniziali per ogni dimensione, con un numero di passi randomici tra 10 e 50
     # Strategia random
-    random.seed(42)
+    # random.seed(42)
     combinazioni = [(3,3), (3,4), (4,4)]
     
     for rows, cols in combinazioni:
-        for _ in range(33):
-            random_number = random.randint(15, 50)
+        for x in range(33):
+            random.seed(x)
+
             main(rows, cols, num_moves=30, do_solve=False)
-            print(f"Configurazione {rows}x{cols} creata con {random_number} mosse.")
+            print(f"Configurazione {rows}x{cols}")
     
     

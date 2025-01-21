@@ -17,7 +17,7 @@ def solve_with_timeout(ctl, results, last_holds, solved_event):
 
     solved_event.set()
 
-def solve_game(maxtime=50, conf="3x3", path_file="./gioco.asp", initial_config_path="./3x3/initial_state/state_2.pl", goal="./goal/3x3.pl", configurations=["crafty"], time_limit=300):
+def solve_game(maxtime=30, conf="3x3", path_file="./gioco.asp", initial_config_path="./3x3/initial_state/state_2.pl", goal="./goal/3x3.pl", configurations=["crafty"], time_limit=300):
     print("######### Risoluzione del gioco con ASP ###########")
     print("Configurazione:", conf)
     print("Risoluzione del gioco al path:", path_file)
@@ -157,8 +157,8 @@ def benchmark():
     # devo risolvere tutte le configurazioni con tutte le configurazioni iniziali per 3x3, 3x4, 4x4
     conf = ["crafty"]
     
-    combinazioni = ["3x3", "3x4", "4x4"]
-    # combinazioni = ["4x4"]
+    # combinazioni = ["3x3", "3x4", "4x4"]
+    combinazioni = ["4x4"]
     # devo salvare i risultati dentro ad un file csv che tiene traccia del tempo impiegato per ogni configurazione
     # devo prendere i dati relativi agli stati iniziali e al goal
     

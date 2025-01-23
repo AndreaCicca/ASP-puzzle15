@@ -24,6 +24,8 @@ def solve_game(maxtime=30, conf="3x3", path_file="./gioco.asp", initial_config_p
     print("Obiettivo al path:", goal)
     print("Configurazione iniziale al path:", initial_config_path)
     print(f"Limite di tempo: {time_limit} secondi")
+    nun_cpu = os.cpu_count()
+    print(f"Numero di CPU: {nun_cpu}")
 
     if configurations is None:
         configurations = ["jumpy", "tweety", "trendy", "crafty", "handy"]
@@ -34,7 +36,7 @@ def solve_game(maxtime=30, conf="3x3", path_file="./gioco.asp", initial_config_p
     for config in configurations:
         print(f"Risoluzione con configurazione: {config}")
 
-        ctl = Control(["-t", "8", "--configuration", config])
+        ctl = Control(["-t", f"{nun_cpu}", "--configuration", config])
 
         # Aggiungi il limite di tempo come direttiva ASP
         ctl.add("base", [], f"#const maxtime = {maxtime}.")
@@ -158,7 +160,8 @@ def benchmark():
     conf = ["crafty"]
     
     # combinazioni = ["3x3", "3x4", "4x4"]
-    combinazioni = ["4x4"]
+    # combinazioni = ["4x4"]
+    combinazioni = ["3x3"]
     # devo salvare i risultati dentro ad un file csv che tiene traccia del tempo impiegato per ogni configurazione
     # devo prendere i dati relativi agli stati iniziali e al goal
     

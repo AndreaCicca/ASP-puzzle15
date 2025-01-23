@@ -7,3 +7,6 @@ holds.txt
 *.txt
 *.json
 *.csv
+
+# voglio includere tutto quello che sta dentro alla cartella goal
+!goal/*

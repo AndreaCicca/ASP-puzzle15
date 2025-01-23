@@ -1,0 +1,9 @@
+goal(posizione_tessera(1, 1, 1)).
+goal(posizione_tessera(2, 1, 2)).
+goal(posizione_tessera(3, 1, 3)).
+goal(posizione_tessera(4, 2, 1)).
+goal(posizione_tessera(5, 2, 2)).
+goal(posizione_tessera(6, 2, 3)).
+goal(posizione_tessera(7, 3, 1)).
+goal(posizione_tessera(8, 3, 2)).
+goal(posizione_tessera(0, 3, 3)).

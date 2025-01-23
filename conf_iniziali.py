@@ -1,22 +1,21 @@
 import json
 import os
 
-def convert_to_initial_state(array, rows, cols):
+def convert_to_initial_state_linear(array):
     """
-    Converte un array in configurazioni iniziali formattate, seguendo l'ordine specificato.
+    Converte un array in configurazioni iniziali formattate con indice lineare.
+    Esempio di output per un valore 3 alla posizione 5:
+        initially(posizione_tessera(3, 5)).
     """
     lines = []
     for i, value in enumerate(array):
-        row, col = divmod(i, cols)
-        row += 1  # Le righe iniziano da 1
-        col += 1  # Le colonne iniziano da 1
-        lines.append(f"initially(posizione_tessera({value}, {row}, {col})).")
+        lines.append(f"initially(posizione_tessera({value}, {i})).")
     return "\n".join(lines)
 
 def create_initial_state_files(input_dir):
     """
     Legge i file JSON nelle sottocartelle, converte gli array in configurazioni iniziali
-    e salva ogni configurazione in un file separato nella rispettiva cartella 'initial_state'.
+    usando la nuova rappresentazione lineare, e salva ogni configurazione in un file separato.
     """
     valid_dirs = {'3x3', '4x4', '3x4'}
     for subdir in os.listdir(input_dir):
@@ -33,6 +32,7 @@ def create_initial_state_files(input_dir):
             continue
 
         # Determina le dimensioni della griglia dalla cartella (ad esempio '3x3' -> 3 righe, 3 colonne)
+        # (Se vuoi utilizzare rows e cols per eventuali controlli, ecc. altrimenti non servono più)
         try:
             rows, cols = map(int, subdir.split('x'))
         except ValueError:
@@ -49,7 +49,10 @@ def create_initial_state_files(input_dir):
 
         # Processa ogni array
         for index, array in enumerate(data):
-            formatted_state = convert_to_initial_state(array, rows, cols)
+            # Genera la configurazione iniziale in formato "lineare"
+            formatted_state = convert_to_initial_state_linear(array)
+            
+            # Salva su file .pl
             output_file = os.path.join(output_dir, f"state_{index + 1}.pl")
             with open(output_file, "w") as file:
                 file.write(formatted_state)

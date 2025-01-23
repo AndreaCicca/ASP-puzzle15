@@ -58,39 +58,7 @@ adiacente(P1,P2) :-
 % r=0 => col: 0..3 => Pos: 0..3
 % r=1 => col: 0..3 => Pos: 4..7
 % r=2 => col: 0..3 => Pos: 8..11
-%
-% Mettiamo un'ipotetica configurazione iniziale
-% (puoi cambiarla a piacere).
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-initially(posizione_tessera(9, 0)).
-initially(posizione_tessera(5, 1)).
-initially(posizione_tessera(7, 2)).
-initially(posizione_tessera(3, 3)).
-initially(posizione_tessera(0, 4)).
-initially(posizione_tessera(1, 5)).
-initially(posizione_tessera(11, 6)).
-initially(posizione_tessera(4, 7)).
-initially(posizione_tessera(6, 8)).
-initially(posizione_tessera(2, 9)).
-initially(posizione_tessera(10, 10)).
-initially(posizione_tessera(8, 11)).
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% 4) CONFIGURAZIONE OBIETTIVO: definisci la "soluzione"
-%    (anche qui esempio generico)
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-goal(posizione_tessera(1,0)).
-goal(posizione_tessera(2,1)).
-goal(posizione_tessera(3,2)).
-goal(posizione_tessera(4,3)).
-goal(posizione_tessera(5,4)).
-goal(posizione_tessera(6,5)).
-goal(posizione_tessera(7,6)).
-goal(posizione_tessera(8,7)).
-goal(posizione_tessera(9, 8)).
-goal(posizione_tessera(10,9)).
-goal(posizione_tessera(11,10)).
-goal(posizione_tessera(0,11)).
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % 5) FLUENTI E FRAME AXIOM

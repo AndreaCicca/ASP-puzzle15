@@ -1,9 +1,9 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % 0) PARAMETRI E COSTANTI
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-#const nr = 3.        % Numero di righe (esempio)
-#const nc = 4.        % Numero di colonne (esempio)
-#const maxtime = 25.  % Tempo massimo di ricerca
+% #const nr = 3.        % Numero di righe (esempio)
+% #const nc = 4.        % Numero di colonne (esempio)
+% #const maxtime = 25.  % Tempo massimo di ricerca
 
 domR(1..nr).
 domC(1..nc).

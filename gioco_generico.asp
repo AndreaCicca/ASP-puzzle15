@@ -111,6 +111,7 @@ goal_reached(T) :-
 
 % Niente azioni dopo che il goal è stato raggiunto
 :- occurs(_, T), goal_reached(TG), T > TG.
+:- holds(_, T), goal_reached(TG), T > TG.
 
 % Evitare "avanti e indietro" immediato
 :- occurs(muovi_spazio(X1, Y1, X2, Y2), T),

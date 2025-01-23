@@ -3,7 +3,7 @@ import csv
 import matplotlib.pyplot as plt
 
 def plot_csv_list(files):
-    fig, axes = plt.subplots(len(files), 1, figsize=(8, 2 * len(files)))
+    fig, axes = plt.subplots(len(files), 1, figsize=(8, 6 * len(files)))
     if len(files) == 1:
         axes = [axes]  # Assicurarsi che axes sia una lista anche per un solo file
 

@@ -5,6 +5,13 @@ import csv
 import os
 from clingo import Control
 
+DEBUG = False
+nun_cpu = os.cpu_count()
+
+# Set debug true with -d flag
+if "-d" in sys.argv:
+    DEBUG = True
+
 def solve_with_timeout(ctl, results, last_holds, solved_event):
     """Funzione per risolvere il problema con il timeout."""
     with ctl.solve(yield_=True) as handle:
@@ -17,15 +24,17 @@ def solve_with_timeout(ctl, results, last_holds, solved_event):
 
     solved_event.set()
 
-def solve_game(maxtime=30, conf="3x3", path_file="./gioco.asp", initial_config_path="./3x3/initial_state/state_2.pl", goal="./goal/3x3.pl", configurations=["crafty"], time_limit=300):
-    print("######### Risoluzione del gioco con ASP ###########")
-    print("Configurazione:", conf)
-    print("Risoluzione del gioco al path:", path_file)
-    print("Obiettivo al path:", goal)
-    print("Configurazione iniziale al path:", initial_config_path)
-    print(f"Limite di tempo: {time_limit} secondi")
-    nun_cpu = os.cpu_count()
-    print(f"Numero di CPU: {nun_cpu}")
+def solve_game(maxtime=50, conf="3x3", path_file="./gioco.asp", initial_config_path="./3x3/initial_state/state_2.pl", goal="./goal/3x3.pl", configurations=["crafty"], time_limit=300):
+    
+    if DEBUG:
+        print("######### Risoluzione del gioco con ASP ###########")
+        print("Configurazione:", conf)
+        print("Risoluzione del gioco al path:", path_file)
+        print("Obiettivo al path:", goal)
+        print("Configurazione iniziale al path:", initial_config_path)
+        print(f"Limite di tempo: {time_limit} secondi")
+        print(f"Numero di CPU: {nun_cpu}")
+        print("Maxtime:", maxtime)
 
     if configurations is None:
         configurations = ["jumpy", "tweety", "trendy", "crafty", "handy"]
@@ -160,8 +169,8 @@ def benchmark():
     conf = ["crafty"]
     
     # combinazioni = ["3x3", "3x4", "4x4"]
-    # combinazioni = ["4x4"]
-    combinazioni = ["3x3"]
+    combinazioni = ["3x4"]
+    # combinazioni = ["3x3"]
     # devo salvare i risultati dentro ad un file csv che tiene traccia del tempo impiegato per ogni configurazione
     # devo prendere i dati relativi agli stati iniziali e al goal
     

@@ -140,7 +140,7 @@ def generate_configuration_random(rows, cols, num_moves):
 # --------------------------------------------------------------
 # Modalità 2: generazione max-Manhattan
 # --------------------------------------------------------------
-def generate_configuration_max_manhattan(rows, cols, num_moves=10):
+def generate_configuration_max_manhattan(rows, cols, num_moves):
     """
     Partendo dalla configurazione finale (soluzione), esegue 'num_moves' mosse,
     ogni volta scegliendo quella che massimizza la distanza di Manhattan.
@@ -264,10 +264,38 @@ def solve_puzzle(start_tiles, rows, cols):
 
     return None
 
+def max_manhattan_approximation(rows, cols):
+    """
+    Approssima la massima distanza di Manhattan raggiungibile per un puzzle risolvibile.
+    """
+    tiles = generate_solution_tiles(rows, cols)  # Configurazione risolta
+    zero_pos = find_zero(tiles)
+
+    max_dist = 0
+    for _ in range(rows * cols * 2):  # Numero arbitrario di mosse
+        best_move = None
+        best_dist = -1
+
+        # Trova la mossa che massimizza la distanza di Manhattan
+        for move in valid_moves(zero_pos, rows, cols):
+            new_tiles = make_move(tiles, zero_pos, move)
+            dist = manhattan_distance(new_tiles, rows, cols)
+            if dist > best_dist:
+                best_dist = dist
+                best_move = move
+
+        if best_move is not None:
+            tiles = make_move(tiles, zero_pos, best_move)
+            zero_pos += best_move
+            max_dist = best_dist
+
+    return max_dist
+
+
 # --------------------------------------------------------------
 # Funzione principale
 # --------------------------------------------------------------
-def main(rows, cols, num_moves=10, do_solve=False):
+def main(rows, cols, num_moves, do_solve=False):
     """
     Funzione principale che:
       1) Genera una configurazione (casuale, mixed, o max-Manhattan).
@@ -313,12 +341,16 @@ if __name__ == "__main__":
     # Strategia random
     # random.seed(42)
     combinazioni = [(3,3), (3,4), (4,4)]
+    random.seed(100)
     
     for rows, cols in combinazioni:
-        for x in range(33):
-            random.seed(x)
-
-            main(rows, cols, num_moves=30, do_solve=False)
+        for x in range(20,40):
+            main(rows, cols, num_moves=x*2, do_solve=False)
             print(f"Configurazione {rows}x{cols}")
     
     
+    for rows, cols in combinazioni:
+        print(f"Massima distanza di Manhattan per {rows}x{cols}: {max_manhattan_approximation(rows, cols)}")
+        
+    # esegio 2dconf_iniziali.py
+    os.system("python 2dconf_iniziali.py")

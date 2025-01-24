@@ -344,8 +344,8 @@ if __name__ == "__main__":
     random.seed(100)
     
     for rows, cols in combinazioni:
-        for x in range(20,40):
-            main(rows, cols, num_moves=x*2, do_solve=False)
+        for x in range(1,100):
+            main(rows, cols, num_moves=x, do_solve=False)
             print(f"Configurazione {rows}x{cols}")
     
     

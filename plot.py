@@ -12,6 +12,7 @@ def parse_holds(holds_text, height, width):
     time_states[t] e' una griglia di dimensioni (height x width).
     """
     # Nuovo pattern: cattura (tessera, pos, tempo)
+    # holds(posizione_tessera(5,1,1),0)
     pattern = r"holds\(posizione_tessera\((\d+),\s*(\d+)\),\s*(\d+)\)"
     matches = re.findall(pattern, holds_text)
 

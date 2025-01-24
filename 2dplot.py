@@ -69,6 +69,12 @@ def main():
             images.append(imageio.imread(f"{output_dir}/puzzle_time_{t}.png"))
         imageio.mimsave('output_images/puzzle_evolution.mp4', images, fps=1, format='ffmpeg')
         print("Video generato con successo.")
+        
+    
+    # Vorrei esportare una gif invece di un video
+    imageio.mimsave('output_images/puzzle_evolution.gif', images, fps=4, format='gif')
+    print("Gif generata con successo.")
+    
 
 if __name__ == "__main__":
     main()

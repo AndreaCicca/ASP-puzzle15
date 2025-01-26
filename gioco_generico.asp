@@ -96,6 +96,19 @@ goal_reached(T) :-
     goal(posizione_spazio(Gx, Gy)),
     holds(posizione_spazio(Gx, Gy), T).
 
+% Definizione di una tessera mancante dalla sua posizione di goal
+% missing_tile(T) :-
+%     time(T),  % Lega T a un momento specifico
+%     goal(posizione_tessera(Tid, X, Y)),
+%     not holds(posizione_tessera(Tid, X, Y), T).
+
+% % Obiettivo raggiunto se lo spazio vuoto è nella posizione di goal e tutte le tessere sono al loro posto
+% goal_reached(T) :-
+%     time(T),
+%     holds(posizione_spazio(Gx, Gy), T),
+%     not missing_tile(T).
+
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % 9) VINCOLI E OTTIMIZZAZIONE
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -108,6 +121,14 @@ goal_reached(T) :-
 
 % Non avvengono due azioni diverse nello stesso T
 :- #count { X1,Y1,X2,Y2 : occurs(muovi_spazio(X1, Y1, X2, Y2), T) } > 1, time(T).
+
+% Vincolo anti-ciclo con grounding esplicito
+% :- occurs(muovi_spazio(X1,Y1,X2,Y2), T),
+%    occurs(muovi_spazio(X2,Y2,X1,Y1), T+1),
+%    occurs(muovi_spazio(X1,Y1,X2,Y2), T+2),
+%    domR(X1), domC(Y1), domR(X2), domC(Y2),
+%    time(T), time(T+1), time(T+2).
+
 
 % Niente azioni dopo che il goal è stato raggiunto
 :- occurs(_, T), goal_reached(TG), T > TG.

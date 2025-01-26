@@ -48,7 +48,7 @@ def solve_game(conf="3x3", path_file="./gioco.asp", initial_config_path="./3x3/i
         if DEBUG:
             print(f"Trying maxtime: {maxtime}")
 
-        ctl = Control(["-t", f"{nun_cpu}", "--configuration", "crafty"])
+        ctl = Control(["-t", f"{nun_cpu}", "--configuration", "crafty", "--opt-strategy", "usc"])
         ctl.add("base", [], f"#const maxtime = {maxtime}.")
         
         if conf == "3x3":
@@ -80,12 +80,14 @@ def solve_game(conf="3x3", path_file="./gioco.asp", initial_config_path="./3x3/i
         if solution_thread.is_alive():
             if DEBUG:
                 print("Timeout raggiunto. Interruzione della risoluzione.")
+            # termina il thread
+            solution_thread.set()
             solution_thread.join()
-            elapsed_time = time_limit
+            total_time = time_limit
+            found_solution = True
         else:
             elapsed_time = time.time() - start_time
-
-        total_time += elapsed_time
+            total_time += elapsed_time
         
         # If we found a solution, store it and break out
         if results:
@@ -104,7 +106,8 @@ def solve_game(conf="3x3", path_file="./gioco.asp", initial_config_path="./3x3/i
     return all_results, times
 
 def benchmark():
-    combinazioni = ["3x4"]
+    # combinazioni = ["3x4"]
+    combinazioni = ["4x4"]
     
     # reset csv
     for c in combinazioni:

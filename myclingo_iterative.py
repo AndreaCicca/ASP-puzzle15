@@ -108,69 +108,6 @@ def solve_game(conf="3x3", path_file="./gioco.asp", initial_config_path="./3x3/i
 
     return all_results, times
 
-def multiple_configuration():
-    # path_file = "./gioco.asp"  
-    # path_goal = "./goal/3x3.pl"
-    # initial_config_path = "./3x3/initial_state/state_2.pl"
-    # configurazione_gioco = "3x3"
-    
-    configurazione_gioco = "3x3"
-    # configurazione_gioco = "3x4"
-    # configurazione_gioco = "4x4"
-    path_file = f"./gioco_generico.asp" 
-    path_goal = f"./goal/{configurazione_gioco}.pl"
-    initial_config_path = f"./{configurazione_gioco}/initial_state/state_10.pl"
-
-    # Controlla i flag e aggiorna i parametri
-    if "-p" in sys.argv:
-        p_index = sys.argv.index("-p")
-        if p_index + 1 < len(sys.argv):
-            path_file = sys.argv[p_index + 1]
-        else:
-            print("Errore: nessun percorso specificato dopo il flag -p")
-            sys.exit(1)
-
-    if "-ci" in sys.argv:
-        ci_index = sys.argv.index("-ci")
-        if ci_index + 1 < len(sys.argv):
-            initial_config_path = sys.argv[ci_index + 1]
-        else:
-            print("Errore: nessun percorso specificato dopo il flag -ci")
-            sys.exit(1)
-
-    # if len(sys.argv) > 1 and sys.argv[1] == "-gara":
-    #     # Risolvi il puzzle dell'8 con gara
-    #     all_solutions, times = solve_game(path_file=path_file, initial_config_path=initial_config_path, goal=path_goal, conf=configurazione_gioco)
-
-    #     # Ordina le configurazioni per tempo
-    #     sorted_configs = sorted(times, key=times.get)
-
-    #     # Stampa i risultati della gara
-    #     print("Classifica della gara:")
-    #     for i, config in enumerate(sorted_configs, 1):
-    #         print(f"{i}. Configurazione: {config}, Tempo: {times[config]:.2f} secondi")
-    #         solutions = all_solutions[config]
-    #         for j, solution in enumerate(solutions, 1):
-    #             print(f"  Soluzione {j}:")
-    #             for action in solution:
-    #                 print(f"    {action}")
-    #             print("\n")
-    # else:
-    
-    # Risolvi il puzzle dell'8 senza gara
-    all_solutions, times = solve_game(path_file=path_file, initial_config_path=initial_config_path, goal=path_goal, conf=configurazione_gioco, time_limit=300)
-    solutions = all_solutions["crafty"]
-    for i, solution in enumerate(solutions, 1):
-        print(f"\n")
-        print(f"Soluzione {i}:")
-        # Ordina le azioni in base al momento temporale
-        sorted_actions = sorted(solution, key=lambda x: int(str(x).split(",")[-1].strip(")")))
-        for action in sorted_actions:
-            print(action)
-    
-    print(f"\n")
-    print(f"Tempo impiegato: {times['crafty']:.2f} secondi")
-
 
 def benchmark():
     

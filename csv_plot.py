@@ -15,6 +15,10 @@ def plot_csv_list(files):
                 conf = row["configurazione"]
                 tempo = float(row["tempo"])
                 mosse = float(row["mosse"])
+                # controllo i tempi e se sono oltre i 300 secondi li metto a 300
+                if tempo > 300:
+                    tempo = 300
+                
                 if conf not in data:
                     data[conf] = {"tempo": [], "mosse": []}
                 data[conf]["tempo"].append(tempo)

@@ -24,7 +24,7 @@ def solve_with_timeout(ctl, results, last_holds, solved_event):
 
     solved_event.set()
 
-def solve_game(conf="3x3", path_file="./gioco.asp", initial_config_path="./3x3/initial_state/state_2.pl", goal="./goal/3x3.pl", configurations=["crafty"], time_limit=300):
+def solve_game(conf="3x3", path_file="./gioco.asp", initial_config_path="./3x3/initial_state/state_2.pl", goal="./goal/3x3.pl", time_limit=300):
     if DEBUG:
         print("######### Risoluzione del gioco con ASP ###########")
         print("Configurazione:", conf)
@@ -34,12 +34,11 @@ def solve_game(conf="3x3", path_file="./gioco.asp", initial_config_path="./3x3/i
         print(f"Limite di tempo: {time_limit} secondi")
         print(f"Numero di CPU: {nun_cpu}")
 
-    if configurations is None:
-        configurations = ["jumpy", "tweety", "trendy", "crafty", "handy"]
-
+    results = []
     all_results = {}
     times = {}
     found_solution = False
+    total_time = 0
 
     # Try different maxtime values from 1 to 50
     for maxtime in range(1, 51):
@@ -48,78 +47,64 @@ def solve_game(conf="3x3", path_file="./gioco.asp", initial_config_path="./3x3/i
 
         if DEBUG:
             print(f"Trying maxtime: {maxtime}")
-            
-        for config in configurations:
+
+        ctl = Control(["-t", f"{nun_cpu}", "--configuration", "crafty"])
+        ctl.add("base", [], f"#const maxtime = {maxtime}.")
+        
+        if conf == "3x3":
+            ctl.add("base", [], "#const nr = 3.")
+            ctl.add("base", [], "#const nc = 3.")
+        elif conf == "4x4":
+            ctl.add("base", [], "#const nr = 4.")
+            ctl.add("base", [], "#const nc = 4.")
+        elif conf == "3x4":
+            ctl.add("base", [], "#const nr = 3.")
+            ctl.add("base", [], "#const nc = 4.")
+
+        if initial_config_path:
+            ctl.load(initial_config_path)
+            ctl.load(goal)
+
+        ctl.load(path_file)
+        ctl.ground([("base", [])])
+
+        results = []
+        last_holds = []
+
+        start_time = time.time()
+        solved = threading.Event()
+        solution_thread = threading.Thread(target=lambda: solve_with_timeout(ctl, results, last_holds, solved))
+        solution_thread.start()
+        solution_thread.join(timeout=time_limit)
+
+        if solution_thread.is_alive():
             if DEBUG:
-                print(f"Risoluzione con configurazione: {config}")
+                print("Timeout raggiunto. Interruzione della risoluzione.")
+            solution_thread.join()
+            elapsed_time = time_limit
+        else:
+            elapsed_time = time.time() - start_time
 
-            ctl = Control(["-t", f"{nun_cpu}", "--configuration", config])
-            ctl.add("base", [], f"#const maxtime = {maxtime}.")
-            
-            if conf == "3x3":
-                ctl.add("base", [], "#const nr = 3.")
-                ctl.add("base", [], "#const nc = 3.")
-            elif conf == "4x4":
-                ctl.add("base", [], "#const nr = 4.")
-                ctl.add("base", [], "#const nc = 4.")
-            elif conf == "3x4":
-                ctl.add("base", [], "#const nr = 3.")
-                ctl.add("base", [], "#const nc = 4.")
-
-            if initial_config_path:
-                ctl.load(initial_config_path)
-                ctl.load(goal)
-
-            ctl.load(path_file)
-            ctl.ground([("base", [])])
-
-            results = []
-            last_holds = []
-
-            start_time = time.time()
-            solved = threading.Event()
-            solution_thread = threading.Thread(target=lambda: solve_with_timeout(ctl, results, last_holds, solved))
-            solution_thread.start()
-            solution_thread.join(timeout=time_limit)
-
-            if solution_thread.is_alive():
-                if DEBUG:
-                    print("Timeout raggiunto. Interruzione della risoluzione.")
-                solution_thread.join()
-                end_time = time_limit
-            else:
-                end_time = time.time()
-
-            elapsed_time = end_time - start_time
-            
-            # If we found a solution, store it and break out
-            if results:
-                all_results[config] = results
-                times[config] = elapsed_time
-                found_solution = True
-                if DEBUG:
-                    print(f"Solution found with maxtime={maxtime}, time={elapsed_time}")
-                break
+        total_time += elapsed_time
+        
+        # If we found a solution, store it and break out
+        if results:
+            all_results["default"] = results
+            times["default"] = total_time
+            found_solution = True
+            if DEBUG:
+                print(f"Solution found with maxtime={maxtime}, time={total_time}")
+            break
 
     if not found_solution:
         if DEBUG:
             print("No solution found")
-        return {}, {configurations[0]: time_limit}
+        return {}, {"default": total_time}
 
     return all_results, times
 
-
 def benchmark():
-    
-    # devo risolvere tutte le configurazioni con tutte le configurazioni iniziali per 3x3, 3x4, 4x4
-    conf = ["crafty"]
-    
-    # combinazioni = ["3x3", "3x4", "4x4"]
     combinazioni = ["3x4"]
-    # combinazioni = ["4x4"]
-    # combinazioni = ["3x3"]
-    # devo salvare i risultati dentro ad un file csv che tiene traccia del tempo impiegato per ogni configurazione
-    # devo prendere i dati relativi agli stati iniziali e al goal
     
     # reset csv
     for c in combinazioni:
@@ -135,11 +120,10 @@ def benchmark():
         print(f"Configurazioni per {c}: ")
         print(lista_iniziali)
         
-        
         for iniziale in lista_iniziali:
             initial_path = f"./{c}/initial_state/{iniziale}"
             all_solutions, times = solve_game(path_file=f"./gioco_generico.asp", initial_config_path=initial_path, goal=goal_path, conf=c)
-            solutions = all_solutions["crafty"]
+            solutions = all_solutions["default"]
             if solutions:
                 shortest_solution = min(solutions, key=lambda x: len(x))
                 mosse_minime = len(shortest_solution)
@@ -147,7 +131,7 @@ def benchmark():
                 mosse_minime = 0
             with open(f'results_{c}.csv', mode='a') as file:
                 writer = csv.writer(file)
-                writer.writerow([c, iniziale, times["crafty"], mosse_minime])
+                writer.writerow([c, iniziale, times["default"], mosse_minime])
         
 
 if __name__ == "__main__":

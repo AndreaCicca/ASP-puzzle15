@@ -87,8 +87,9 @@ def solve_game(maxtime=50, conf="3x3", path_file="./gioco.asp", initial_config_p
         if solution_thread.is_alive():
             print("Timeout raggiunto. Interruzione della risoluzione.")
             solution_thread.join()  # Assicurati che il thread si chiuda correttamente
-
-        end_time = time.time()
+            end_time = time_limit
+        else:
+            end_time = time.time()
 
         # # Dopo aver iterato tutti i modelli, scrivi gli holds dell'ultimo nel file
         # with open("holds.txt", "w") as file:

@@ -6,11 +6,15 @@ import os
 from clingo import Control
 
 DEBUG = False
+DEBUGDEEP = False
 nun_cpu = os.cpu_count()
 
 # Set debug true with -d flag
 if "-d" in sys.argv:
     DEBUG = True
+    
+if "-dd" in sys.argv:
+    DEBUGDEEP = True
 
 def solve_with_timeout(ctl, results, last_holds, solved_event):
     """Funzione per risolvere il problema con il timeout."""
@@ -51,7 +55,7 @@ class SolverThread(threading.Thread):
         self.solved_event.set()
 
 def solve_game(conf="3x3", path_file="./gioco.asp", initial_config_path="./3x3/initial_state/state_2.pl", goal="./goal/3x3.pl", time_limit=300):
-    if DEBUG:
+    if DEBUGDEEP:
         print("######### Risoluzione del gioco con ASP ###########")
         print("Configurazione:", conf)
         print("Risoluzione del gioco al path:", path_file)

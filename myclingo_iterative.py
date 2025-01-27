@@ -156,7 +156,7 @@ def benchmark():
         for iniziale in lista_iniziali:
             initial_path = f"./{c}/initial_state/{iniziale}"
             all_solutions, times = solve_game(path_file=f"./gioco_generico.asp", initial_config_path=initial_path, goal=goal_path, conf=c)
-            solutions = all_solutions["default"]
+            solutions = all_solutions.get("default", [])
             if solutions:
                 shortest_solution = min(solutions, key=lambda x: len(x))
                 mosse_minime = len(shortest_solution)

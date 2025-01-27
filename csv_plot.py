@@ -33,6 +33,8 @@ def plot_csv_list(files):
         axes[i].set_ylabel("mosse")
         axes[i].set_title(f"File: {filename}")
         axes[i].legend()
+        # set log x
+        axes[i].set_xscale("log")
 
     plt.tight_layout()
     # plt.show()

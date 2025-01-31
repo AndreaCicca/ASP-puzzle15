@@ -23,10 +23,6 @@ adiacente(X, Y, X-1, Y) :- domR(X),   domC(Y),   X > 1.
 adiacente(X, Y, X, Y+1) :- domR(X),   domC(Y),   Y < nc.
 adiacente(X, Y, X, Y-1) :- domR(X),   domC(Y),   Y > 1.
 
-% L’azione è definita per posizioni contigue nel tabellone
-azione(muovi_spazio(X1, Y1, X2, Y2)) :-
-    adiacente(X1, Y1, X2, Y2).
-
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % 4) POSSIBILITA' DELL'AZIONE
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

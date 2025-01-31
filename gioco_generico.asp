@@ -87,14 +87,6 @@ holds(F, 0) :- initially(F).
 % Goal raggiunto T se:
 % - Tutte le tessere sono al posto giusto
 % - Lo spazio è nella posizione obiettivo (se specificato)
-% goal_reached(T) :-
-%     time(T),
-%     #count {
-%        Tid, X, Y : goal(posizione_tessera(Tid, X, Y)),
-%                    holds(posizione_tessera(Tid, X, Y), T)
-%     } = (nr*nc - 1),
-%     goal(posizione_spazio(Gx, Gy)),
-%     holds(posizione_spazio(Gx, Gy), T).
 
 goal_reached(T) :-
     time(T),
@@ -120,15 +112,7 @@ missing_tile(T) :-
 :- not goal_reached(_).
 
 % Non avvengono due azioni diverse nello stesso T
-:- #count { X1,Y1,X2,Y2 : occurs(muovi_spazio(X1, Y1, X2, Y2), T) } > 1, time(T).
-
-% Vincolo anti-ciclo con grounding esplicito
-% :- occurs(muovi_spazio(X1,Y1,X2,Y2), T),
-%    occurs(muovi_spazio(X2,Y2,X1,Y1), T+1),
-%    occurs(muovi_spazio(X1,Y1,X2,Y2), T+2),
-%    domR(X1), domC(Y1), domR(X2), domC(Y2),
-%    time(T), time(T+1), time(T+2).
-
+:- 2 { occurs(muovi_spazio(X1,Y1,X2,Y2), T) }, time(T).
 
 % Niente azioni dopo che il goal è stato raggiunto
 :- occurs(_, T), goal_reached(TG), T > TG.

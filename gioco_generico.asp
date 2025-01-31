@@ -87,26 +87,26 @@ holds(F, 0) :- initially(F).
 % Goal raggiunto T se:
 % - Tutte le tessere sono al posto giusto
 % - Lo spazio è nella posizione obiettivo (se specificato)
-goal_reached(T) :-
-    time(T),
-    #count {
-       Tid, X, Y : goal(posizione_tessera(Tid, X, Y)),
-                   holds(posizione_tessera(Tid, X, Y), T)
-    } = (nr*nc - 1),
-    goal(posizione_spazio(Gx, Gy)),
-    holds(posizione_spazio(Gx, Gy), T).
-
-% Definizione di una tessera mancante dalla sua posizione di goal
-% missing_tile(T) :-
-%     time(T),  % Lega T a un momento specifico
-%     goal(posizione_tessera(Tid, X, Y)),
-%     not holds(posizione_tessera(Tid, X, Y), T).
-
-% % Obiettivo raggiunto se lo spazio vuoto è nella posizione di goal e tutte le tessere sono al loro posto
 % goal_reached(T) :-
 %     time(T),
-%     holds(posizione_spazio(Gx, Gy), T),
-%     not missing_tile(T).
+%     #count {
+%        Tid, X, Y : goal(posizione_tessera(Tid, X, Y)),
+%                    holds(posizione_tessera(Tid, X, Y), T)
+%     } = (nr*nc - 1),
+%     goal(posizione_spazio(Gx, Gy)),
+%     holds(posizione_spazio(Gx, Gy), T).
+
+goal_reached(T) :-
+    time(T),
+    holds(posizione_spazio(Gx, Gy), T),
+    goal(posizione_spazio(Gx, Gy)),
+    not missing_tile(T).
+
+missing_tile(T) :-
+    time(T),
+    goal(posizione_tessera(Tid, X, Y)),
+    not holds(posizione_tessera(Tid, X, Y), T).
+
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

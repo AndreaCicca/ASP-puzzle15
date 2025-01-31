@@ -3,7 +3,7 @@ import csv
 import matplotlib.pyplot as plt
 
 def plot_csv_list(files):
-    fig, axes = plt.subplots(len(files), 1, figsize=(8, 6 * len(files)))
+    fig, axes = plt.subplots(len(files), 1, figsize=(8, 4 * len(files)))
     if len(files) == 1:
         axes = [axes]  # Assicurarsi che axes sia una lista anche per un solo file
 
@@ -15,9 +15,9 @@ def plot_csv_list(files):
                 conf = row["configurazione"]
                 tempo = float(row["tempo"])
                 mosse = float(row["mosse"])
-                # controllo i tempi e se sono oltre i 300 secondi li metto a 300
+                
                 if tempo > 300:
-                    tempo = 300
+                    continue
                 
                 if conf not in data:
                     data[conf] = {"tempo": [], "mosse": []}
@@ -34,7 +34,7 @@ def plot_csv_list(files):
         axes[i].set_title(f"File: {filename}")
         axes[i].legend()
         # set log x
-        axes[i].set_xscale("log")
+        # axes[i].set_xscale("log")
 
     plt.tight_layout()
     # plt.show()

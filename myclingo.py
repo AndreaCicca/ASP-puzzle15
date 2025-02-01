@@ -85,8 +85,7 @@ def solve_game(conf="3x3",
             print(f"Tentativo con maxtime={maxtime}, tempo rimanente={tempo_rimanente:.2f}s")
 
         ctl = Control(["-t", f"{nun_cpu}", 
-                       "--configuration", "crafty", 
-                       "--opt-strategy", "bb", 
+                       "--configuration", "crafty",
                        "--rand-freq", "0.02"])
         ctl.add("base", [], f"#const maxtime = {maxtime}.")
 

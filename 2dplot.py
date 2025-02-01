@@ -67,7 +67,7 @@ def main():
         images = []
         for t in sorted(time_states.keys()):
             images.append(imageio.imread(f"{output_dir}/puzzle_time_{t}.png"))
-        imageio.mimsave('output_images/puzzle_evolution.mp4', images, fps=1, format='ffmpeg')
+        imageio.mimsave('output_images/puzzle_evolution.mp4', images, fps=2, format='ffmpeg')
         print("Video generato con successo.")
         
     

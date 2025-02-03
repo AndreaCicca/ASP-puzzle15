@@ -11,7 +11,7 @@ df = pd.read_csv("strategia.csv",
 print(df)
 
 # Imposta la dimensione della figura
-plt.figure(figsize=(8, 6))
+plt.figure(figsize=(8, 4))
 
 # Crea un grafico a barre: asse x per le configurazioni, asse y per i tempi
 plt.bar(df['configuration'], df['time'], color="skyblue")

@@ -1,7 +1,7 @@
 ./elimina_esempi.sh
-python crea_configurazioni_iniziali.py --mixed
-# python crea_configurazioni_iniziali.py
-
+python crea_configurazioni_iniziali.py --random
+python 2dconf_iniziali.py
+python 2dgoal.py
 python myclingo.py
 # python plot.py -a 3 -l 3
 

@@ -1,8 +1,8 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % 0) PARAMETRI E COSTANTI
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% #const nr = 3.        % Numero di righe (esempio)
-% #const nc = 4.        % Numero di colonne (esempio)
+% #const nr = 3.        % Numero di righe
+% #const nc = 4.        % Numero di colonne
 % #const maxtime = 25.  % Tempo massimo di ricerca
 
 domR(1..nr).
@@ -26,9 +26,8 @@ adiacente(X, Y, X, Y-1) :- domR(X),   domC(Y),   Y > 1.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % 4) POSSIBILITA' DELL'AZIONE
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% Correzione fondamentale:
-% --> Adesso verifichiamo che X1,Y1 e X2,Y2 siano adiacenti ANCHE QUI,
-%     e non solo nella definizione dell'azione stessa.
+% Un azione è possibile se:
+% - Lo spazio è adiacente alla tessera
 
 possibile(muovi_spazio(X1, Y1, X2, Y2), T) :-
     holds(posizione_spazio(X1, Y1), T),

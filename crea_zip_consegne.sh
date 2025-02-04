@@ -1,0 +1,1 @@
+zip -r consegne.zip gioco_generico.asp myclingo.py 2dgoal.py 2dplot.py crea_configurazioni_iniziali.py

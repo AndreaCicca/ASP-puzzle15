@@ -7,18 +7,18 @@ df = pd.read_csv("strategia.csv",
                  delimiter=";", 
                  converters={"time": lambda x: float(x.rstrip('s'))})
 
-# Visualizza il DataFrame per controllare che i dati siano stati caricati correttamente
-print(df)
+# Ordina il DataFrame in base alla colonna 'time' in ordine decrescente
+df = df.sort_values('time', ascending=False).reset_index(drop=True)
 
 # Imposta la dimensione della figura
-plt.figure(figsize=(8, 4))
+plt.figure(figsize=(8, 5))
 
 # Crea un grafico a barre: asse x per le configurazioni, asse y per i tempi
-plt.bar(df['configuration'], df['time'], color="skyblue")
+plt.bar(df['configuration'], df['time'], color="skyblue", width=0.5)
 
 # Aggiunge etichette agli assi e un titolo
 plt.xlabel("Configurazione")
-plt.ylabel("Tempo (s)")
+plt.ylabel("Tempo (s) CPU Time")
 plt.title("Ottimizzazione")
 
 # Aggiunge una griglia orizzontale per facilitare la lettura del grafico

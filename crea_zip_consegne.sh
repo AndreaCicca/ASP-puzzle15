@@ -1,1 +1,1 @@
-zip -r consegne.zip gioco_generico.asp myclingo.py 2dgoal.py 2dplot.py crea_configurazioni_iniziali.py Programmazione_dichiarativa.pdf
+zip -r consegne.zip gioco_generico.asp myclingo.py 2dgoal.py 2dplot.py crea_configurazioni_iniziali.py Programmazione_dichiarativa.pdf 3x3 4x4 3x4 goal output_images/puzzle_evolution.gif test.sh ./elimina_esempi.sh

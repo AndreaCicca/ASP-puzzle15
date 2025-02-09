@@ -38,8 +38,12 @@ possibile(muovi_spazio(X1, Y1, X2, Y2), T) :-
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % 5) SCELTA DELL'AZIONE
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-{ occurs(muovi_spazio(X1, Y1, X2, Y2), T) } :-
-    possibile(muovi_spazio(X1, Y1, X2, Y2), T).
+% { occurs(muovi_spazio(X1, Y1, X2, Y2), T) } :-
+%     possibile(muovi_spazio(X1, Y1, X2, Y2), T).
+
+0 { occurs(muovi_spazio(X1,Y1,X2,Y2), T) : 
+      possibile(muovi_spazio(X1,Y1,X2,Y2), T) } 1 :- time(T).
+
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % 6) TRANSIZIONE DI STATO (EFFETTI)
@@ -107,7 +111,7 @@ missing_tile(T) :-
 :- not goal_reached(_).
 
 % Non avvengono due azioni diverse nello stesso T
-:- 2 { occurs(muovi_spazio(X1,Y1,X2,Y2), T) }, time(T).
+% :- 2 { occurs(muovi_spazio(X1,Y1,X2,Y2), T) }, time(T).
 
 % Niente azioni dopo che il goal è stato raggiunto
 :- occurs(_, T), goal_reached(TG), T > TG.

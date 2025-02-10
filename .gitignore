@@ -8,3 +8,7 @@ holds.txt
 *.json
 *.csv
 *.zip
+
+# web/requirements.txt deve essere incluso
+
+!web/requirements.txt

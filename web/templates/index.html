@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Visualizzatore gioco 15</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="{{ url_for('static', filename='css/style.css') }}" rel="stylesheet">
+</head>
+<body class="bg-light">
+    <div class="container-fluid py-5">
+        <h1 class="text-center page-title mb-5">Puzzle 15 Visualizer</h1>
+        
+        <div class="row">
+            <!-- GIF Column -->
+            <div class="col-lg-7 result-container">
+                <div class="loading text-center">
+                    <div class="spinner-border text-primary" role="status">
+                        <span class="visually-hidden">Loading...</span>
+                    </div>
+                    <p class="mt-2 text-primary">Generazione GIF in corso...</p>
+                </div>
+                <div id="preview-container" class="text-center">
+                    <img id="resultGif" class="img-fluid rounded shadow puzzle-gif" alt="Puzzle Evolution">
+                </div>
+            </div>
+
+            <!-- Form Column -->
+            <div class="col-lg-5">
+                <div class="card shadow">
+                    <div class="card-body">
+                        <form id="puzzleForm" class="needs-validation" novalidate>
+                            <div class="mb-4">
+                                <label for="holds" class="form-label fw-bold">Inserisci gli holds:</label>
+                                <textarea class="form-control" id="holds" name="holds" rows="10" required 
+                                    placeholder="Inserisci qui il contenuto degli holds..."></textarea>
+                                <div class="invalid-feedback">
+                                    Per favore inserisci il contenuto degli holds.
+                                </div>
+                                <small class="form-text text-muted mt-2">
+                                    La dimensione del puzzle sarà determinata automaticamente in base ai numeri delle tessere.
+                                </small>
+                            </div>
+                            
+                            <div class="text-center">
+                                <button type="submit" class="btn btn-primary btn-lg px-4">
+                                    Genera GIF
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+</body>
+</html>

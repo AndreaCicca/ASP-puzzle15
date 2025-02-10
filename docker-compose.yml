@@ -1,0 +1,11 @@
+version: '3'
+
+services:
+  web:
+    build: ./web
+    ports:
+      - "8090:8090"
+    volumes:
+      - ./web:/app
+    environment:
+      - PYTHONUNBUFFERED=1
